@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from tkinter import Listbox
 
 
 def abrir_clientes(janela_principal):
@@ -9,21 +10,15 @@ def abrir_clientes(janela_principal):
     janela_clientes.title("3xM System - Clientes")
     janela_clientes.state("zoomed")
 
-    # ---------- LISTA DE DADOS ----------
-
     lista_dados_clientes = []
     cliente_selecionado = None
 
-    # ---------- FUNÇÕES ----------
-
     def atualizar_lista():
 
-        lista_clientes.delete("1.0", "end")
+        lista_clientes.delete(0, "end")
 
-        for i, cliente in enumerate(lista_dados_clientes):
-
-            texto = f"{i+1} - {cliente['nome']} | {cliente['telefone']} | {cliente['email']}\n"
-
+        for cliente in lista_dados_clientes:
+            texto = f"{cliente['nome']} | {cliente['telefone']} | {cliente['email']}"
             lista_clientes.insert("end", texto)
 
     def cadastrar():
@@ -75,13 +70,20 @@ def abrir_clientes(janela_principal):
 
         atualizar_lista()
 
+        entry_nome.delete(0, "end")
+        entry_telefone.delete(0, "end")
+        entry_email.delete(0, "end")
+
     def selecionar_cliente(event):
 
         nonlocal cliente_selecionado
 
-        linha = lista_clientes.index("insert").split(".")[0]
+        selecionado = lista_clientes.curselection()
 
-        cliente_selecionado = int(linha) - 1
+        if not selecionado:
+            return
+
+        cliente_selecionado = selecionado[0]
 
         cliente = lista_dados_clientes[cliente_selecionado]
 
@@ -99,12 +101,8 @@ def abrir_clientes(janela_principal):
         janela_principal.deiconify()
         janela_principal.state("zoomed")
 
-    # ---------- CONTAINER ----------
-
     container = ctk.CTkFrame(janela_clientes, corner_radius=0)
     container.pack(fill="both", expand=True, padx=20, pady=20)
-
-    # ---------- TÍTULO ----------
 
     titulo = ctk.CTkLabel(
         container,
@@ -112,8 +110,6 @@ def abrir_clientes(janela_principal):
         font=("Segoe UI", 28, "bold")
     )
     titulo.pack(pady=20)
-
-    # ---------- FORMULÁRIO ----------
 
     frame_form = ctk.CTkFrame(container)
     frame_form.pack(fill="x", padx=50, pady=10)
@@ -152,8 +148,6 @@ def abrir_clientes(janela_principal):
     )
     botao_cadastrar.pack(side="left", padx=10)
 
-    # ---------- LISTA ----------
-
     frame_lista = ctk.CTkFrame(container)
     frame_lista.pack(fill="both", expand=True, padx=50, pady=20)
 
@@ -164,16 +158,14 @@ def abrir_clientes(janela_principal):
     )
     label_lista.pack(pady=10)
 
-    lista_clientes = ctk.CTkTextbox(
+    lista_clientes = Listbox(
         frame_lista,
-        height=300,
-        font=("Consolas", 14)
+        height=12,
+        font=("Segoe UI", 13)
     )
-    lista_clientes.pack(fill="both", expand=True, padx=20, pady=10)
+    lista_clientes.pack(fill="both", padx=20, pady=10)
 
     lista_clientes.bind("<ButtonRelease-1>", selecionar_cliente)
-
-    # ---------- BOTÕES ----------
 
     frame_botoes = ctk.CTkFrame(container)
     frame_botoes.pack(pady=20)

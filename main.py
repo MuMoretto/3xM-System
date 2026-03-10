@@ -4,8 +4,6 @@ from program_functions.system_menu import showMenu
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("blue")
 
-# -------- FUNÇÃO LOGIN --------
-
 def verificar_login(event=None):
     usuario = entry_usuario.get()
     senha = entry_senha.get()
@@ -16,15 +14,11 @@ def verificar_login(event=None):
     else:
         label_erro.configure(text="Usuário ou senha incorretos!")
 
-# -------- MOSTRAR SENHA --------
-
 def mostrar_senha():
     if entry_senha.cget("show") == "*":
         entry_senha.configure(show="")
     else:
         entry_senha.configure(show="*")
-
-# -------- JANELA PRINCIPAL --------
 
 janela = ctk.CTk()
 janela.title("3xM - Login")
@@ -40,8 +34,6 @@ y = int((screen_h/2) - (altura/2))
 
 janela.geometry(f"{largura}x{altura}+{x}+{y}")
 
-# -------- CARD LOGIN --------
-
 card = ctk.CTkFrame(
     janela,
     width=500,
@@ -52,16 +44,12 @@ card = ctk.CTkFrame(
 card.place(relx=0.5, rely=0.5, anchor="center")
 card.pack_propagate(False)
 
-# -------- TÍTULO --------
-
 titulo = ctk.CTkLabel(
     card,
     text="Bem-Vindo ao 3xM System",
     font=("Arial", 28, "bold")
 )
 titulo.pack(pady=30)
-
-# -------- USUÁRIO --------
 
 entry_usuario = ctk.CTkEntry(
     card,
@@ -72,8 +60,6 @@ entry_usuario = ctk.CTkEntry(
     font=("Arial", 14)
 )
 entry_usuario.pack(pady=15)
-
-# -------- SENHA --------
 
 frame_senha = ctk.CTkFrame(card, fg_color="transparent")
 frame_senha.pack(pady=15)
@@ -98,8 +84,6 @@ botao_olho = ctk.CTkButton(
 )
 botao_olho.pack(side="left", padx=5)
 
-# -------- BOTÃO LOGIN --------
-
 botao_login = ctk.CTkButton(
     card,
     text="Entrar",
@@ -111,16 +95,12 @@ botao_login = ctk.CTkButton(
 )
 botao_login.pack(pady=25)
 
-# -------- ERRO --------
-
 label_erro = ctk.CTkLabel(
     card,
     text="",
     text_color="red"
 )
 label_erro.pack()
-
-# -------- ENTER PARA LOGAR --------
 
 janela.bind("<Return>", verificar_login)
 

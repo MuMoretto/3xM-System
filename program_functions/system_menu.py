@@ -4,15 +4,12 @@ from program_functions.system_clientes import abrir_clientes
 from program_functions.system_produtos import abrir_produtos
 
 def showMenu(mainWindow):
-
-    # esconder login
     mainWindow.withdraw()
 
     menuWindow = ctk.CTkToplevel()
     menuWindow.title("3xM System - Menu")
     menuWindow.state("zoomed")
 
-    # CARD CENTRAL
     card = ctk.CTkFrame(
         menuWindow,
         width=800,
@@ -23,7 +20,6 @@ def showMenu(mainWindow):
 
     card.grid_propagate(False)
 
-    # TÍTULO
     titulo = ctk.CTkLabel(
         card,
         text="Menu Principal",
@@ -31,7 +27,6 @@ def showMenu(mainWindow):
     )
     titulo.pack(pady=40)
 
-    # BOTÕES DO SISTEMA
     botao_clientes = ctk.CTkButton(
         card,
         text="🧍 Clientes", font=("Arial", 25, "bold"),
@@ -59,7 +54,6 @@ def showMenu(mainWindow):
     )
     botao_vendas.pack(pady=10)
 
-    # BOTÃO SAIR
     botao_sair = ctk.CTkButton(
         card,
         text="↩️ Sair", font=("Arial", 25, "bold"),
