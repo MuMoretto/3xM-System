@@ -47,7 +47,7 @@ def abrir_vendas(janela_principal):
     # ---------- LISTA DE PRODUTOS ----------
 
     frame_lista = ctk.CTkFrame(container)
-    frame_lista.pack(fill="both", expand=True, padx=50, pady=20)
+    frame_lista.pack(fill="both", padx=50, pady=20)
 
     label_lista = ctk.CTkLabel(
         frame_lista,
@@ -57,11 +57,11 @@ def abrir_vendas(janela_principal):
     label_lista.pack(pady=10)
 
     lista_produtos = ctk.CTkTextbox(
-        frame_lista,
-        height=300,
-        font=("Consolas", 14)
+    frame_lista,
+    height=250,
+    font=("Consolas", 14)
     )
-    lista_produtos.pack(fill="both", expand=True, padx=20, pady=10)
+    lista_produtos.pack(fill="x", padx=20, pady=10)
 
     # ---------- TOTAL ----------
 
