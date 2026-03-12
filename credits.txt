@@ -1,2 +1,2 @@
-Sales system personally developed by Murilo Moretto. 
+Sales system personally developed by Murilo Moretto.
 Originally developed with features for local commerce.

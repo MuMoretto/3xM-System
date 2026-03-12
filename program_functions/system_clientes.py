@@ -1,5 +1,15 @@
 import customtkinter as ctk
 from tkinter import Listbox
+import mysql.connector
+
+
+def conectar():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="SUA_SENHA",
+        database="sistema_3xm"
+    )
 
 
 def abrir_clientes(janela_principal):
@@ -10,15 +20,20 @@ def abrir_clientes(janela_principal):
     janela_clientes.title("3xM System - Clientes")
     janela_clientes.state("zoomed")
 
-    lista_dados_clientes = []
     cliente_selecionado = None
+
+    conn = conectar()
+    cursor = conn.cursor()
 
     def atualizar_lista():
 
         lista_clientes.delete(0, "end")
 
-        for cliente in lista_dados_clientes:
-            texto = f"{cliente['nome']} | {cliente['telefone']} | {cliente['email']}"
+        cursor.execute("SELECT * FROM clientes")
+        clientes = cursor.fetchall()
+
+        for cliente in clientes:
+            texto = f"{cliente[1]} | {cliente[2]} | {cliente[3]}"
             lista_clientes.insert("end", texto)
 
     def cadastrar():
@@ -30,13 +45,9 @@ def abrir_clientes(janela_principal):
         if nome == "":
             return
 
-        cliente = {
-            "nome": nome,
-            "telefone": telefone,
-            "email": email
-        }
-
-        lista_dados_clientes.append(cliente)
+        sql = "INSERT INTO clientes (nome, telefone, email) VALUES (%s,%s,%s)"
+        cursor.execute(sql, (nome, telefone, email))
+        conn.commit()
 
         atualizar_lista()
 
@@ -51,9 +62,23 @@ def abrir_clientes(janela_principal):
         if cliente_selecionado is None:
             return
 
-        lista_dados_clientes[cliente_selecionado]["nome"] = entry_nome.get()
-        lista_dados_clientes[cliente_selecionado]["telefone"] = entry_telefone.get()
-        lista_dados_clientes[cliente_selecionado]["email"] = entry_email.get()
+        nome = entry_nome.get()
+        telefone = entry_telefone.get()
+        email = entry_email.get()
+
+        cursor.execute("SELECT id FROM clientes")
+        ids = cursor.fetchall()
+
+        id_cliente = ids[cliente_selecionado][0]
+
+        sql = """
+        UPDATE clientes
+        SET nome=%s, telefone=%s, email=%s
+        WHERE id=%s
+        """
+
+        cursor.execute(sql, (nome, telefone, email, id_cliente))
+        conn.commit()
 
         atualizar_lista()
 
@@ -64,7 +89,13 @@ def abrir_clientes(janela_principal):
         if cliente_selecionado is None:
             return
 
-        lista_dados_clientes.pop(cliente_selecionado)
+        cursor.execute("SELECT id FROM clientes")
+        ids = cursor.fetchall()
+
+        id_cliente = ids[cliente_selecionado][0]
+
+        cursor.execute("DELETE FROM clientes WHERE id=%s", (id_cliente,))
+        conn.commit()
 
         cliente_selecionado = None
 
@@ -85,15 +116,18 @@ def abrir_clientes(janela_principal):
 
         cliente_selecionado = selecionado[0]
 
-        cliente = lista_dados_clientes[cliente_selecionado]
+        cursor.execute("SELECT * FROM clientes")
+        clientes = cursor.fetchall()
+
+        cliente = clientes[cliente_selecionado]
 
         entry_nome.delete(0, "end")
         entry_telefone.delete(0, "end")
         entry_email.delete(0, "end")
 
-        entry_nome.insert(0, cliente["nome"])
-        entry_telefone.insert(0, cliente["telefone"])
-        entry_email.insert(0, cliente["email"])
+        entry_nome.insert(0, cliente[1])
+        entry_telefone.insert(0, cliente[2])
+        entry_email.insert(0, cliente[3])
 
     def voltar():
 
@@ -198,3 +232,5 @@ def abrir_clientes(janela_principal):
         command=voltar
     )
     botao_voltar.pack(side="left", padx=10)
+
+    atualizar_lista()
